@@ -1,4 +1,5 @@
 use crate::cmd::parse_args;
+use std::path::Path;
 
 pub mod cmd;
 
@@ -12,4 +13,9 @@ fn main() {
     };
 
     println!("{:#?}", args);
+    if Path::new(&args.file).exists() {
+        println!("file exists");
+    } else {
+        println!("file not exists");
+    }
 }

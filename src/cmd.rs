@@ -20,12 +20,12 @@ OPTIONS:
 
 #[derive(Debug)]
 pub struct AppArgs {
-    file: String,
-    login: String,
-    special: String,
-    length: u32,
-    clip: bool,
-    func: String,
+    pub file: String,
+    pub login: String,
+    pub special: String,
+    pub length: u32,
+    pub clip: bool,
+    pub func: String,
 }
 
 pub fn parse_args() -> Result<AppArgs, pico_args::Error> {
