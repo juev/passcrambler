@@ -10,4 +10,4 @@ edition = "2018"
 split-debuginfo = "unpacked"
 
 [dependencies]
-clap = "2.33.3"
+pico-args = "0.4.1"
