@@ -10,11 +10,8 @@ FLAGS:
   -h, --help            Prints help information
 
 OPTIONS:
-  --special STR         Whitelist of special characters, i.e: '_&#'
-  --opt-number NUMBER   Sets an optional number
-  --length 30           Length of the password, default=30
+  -L, --length 30       Length of the password, default=30
   -c, --clip            Copy the generated password into the clipboard instead of displaying
-  --scramble-func md5   Hashing function to use for input data scrambling, default=md5.
 "
 );
 
@@ -22,10 +19,8 @@ OPTIONS:
 pub struct AppArgs {
     pub file: String,
     pub login: String,
-    pub special: String,
     pub length: u32,
     pub clip: bool,
-    pub func: String,
 }
 
 pub fn parse_args() -> Result<AppArgs, pico_args::Error> {
@@ -35,25 +30,17 @@ pub fn parse_args() -> Result<AppArgs, pico_args::Error> {
         std::process::exit(0);
     }
 
-    let file: String = pargs.value_from_str("--file")?;
-    let login: String = pargs.value_from_str("--login")?;
-    let special: String = pargs
-        .value_from_str("--special")
-        .unwrap_or("_&#".to_string());
+    let file: String = pargs.value_from_str(["-f", "--file"])?;
+    let login: String = pargs.value_from_str(["-l", "--login"])?;
     let length: u32 = pargs
-        .opt_value_from_fn("--length", parse_length)?
+        .opt_value_from_fn(["-L", "--length"], parse_length)?
         .unwrap_or(30);
-    let func: String = pargs
-        .value_from_str("--scramble-func")
-        .unwrap_or("md5".to_string());
 
     Ok(AppArgs {
         file,
         login,
-        special,
         length,
         clip: pargs.contains(["-c", "--clip"]),
-        func,
     })
 }
 
