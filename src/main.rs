@@ -1,7 +1,7 @@
 use crate::cmd::parse_args;
 use std::path::Path;
 use rpassword::{prompt_password_stdout};
-use crypto::sha2::Sha256;
+use crypto::sha3::Sha3;
 use crypto::digest::Digest;
 
 pub mod cmd;
@@ -22,7 +22,7 @@ fn main() {
 
     let password = prompt_password_stdout("Type password: ").unwrap();
 
-    let mut hasher = Sha256::new();
+    let mut hasher = Sha3::sha3_256();
 
     // get password digest
     hasher.input_str(&*password);
