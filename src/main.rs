@@ -1,8 +1,7 @@
 use crate::cmd::parse_args;
 use std::path::Path;
 use rpassword::{prompt_password_stdout};
-use crypto::sha3::Sha3;
-use crypto::digest::Digest;
+use blake2::{Blake2b, Digest};
 
 pub mod cmd;
 
@@ -22,22 +21,13 @@ fn main() {
 
     let password = prompt_password_stdout("Type password: ").unwrap();
 
-    let mut hasher = Sha3::sha3_256();
-
     // get password digest
-    hasher.input_str(&*password);
-    let pass_digest = hasher.result_str();
-
-    // reset hasher for using with new value
-    hasher.reset();
+    let pass_digest = Blake2b::digest(password.as_ref());
 
     // get login digest
-    let login = &args.login;
-    hasher.input_str(&*login);
-    let login_digest = hasher.result_str();
+    let login_digest = Blake2b::digest((&args.login).as_ref());
 
     // print login and password digest
-    println!("login digest: {}", login_digest);
-    println!("password digest: {}", pass_digest);
-
+    println!("login digest: {:x}", login_digest);
+    println!("password digest: {:x}", pass_digest);
 }
