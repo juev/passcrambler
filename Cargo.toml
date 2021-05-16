@@ -11,6 +11,5 @@ split-debuginfo = "unpacked"
 
 [dependencies]
 pico-args = "0.4.1"
-aes = "0.7.1"
 rpassword = "5.0.1"
-sha256 = "1.0.2"
+rust-crypto = "0.2.36"
