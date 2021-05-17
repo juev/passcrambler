@@ -4,12 +4,13 @@ use rpassword::prompt_password_stdout;
 use std::path::Path;
 
 use crypto::aes::{cbc_encryptor, KeySize};
-use crypto::blockmodes::PkcsPadding;
-use crypto::buffer::{ReadBuffer, WriteBuffer, BufferResult};
+use crypto::blockmodes::{PkcsPadding, NoPadding};
+use crypto::buffer::{BufferResult, ReadBuffer, WriteBuffer};
 use crypto::buffer::{RefReadBuffer, RefWriteBuffer};
 
 use crypto::digest::Digest;
 use crypto::sha3::Sha3;
+use crypto::symmetriccipher::SymmetricCipherError;
 
 pub mod cmd;
 
@@ -45,7 +46,11 @@ fn main() {
     println!("login digest: {}", login_digest);
     println!("password digest: {}", pass_digest);
 
-    let result = aes_encrypt(b"Hello world", pass_digest.as_ref(), login_digest.as_ref());
+    let result = aes_encrypt(
+        b"Hello world, hello world, hello world",
+        pass_digest.as_bytes(),
+        login_digest.as_bytes(),
+    );
 
     println!("{:?}", result);
 }
@@ -59,20 +64,26 @@ pub fn aes_encrypt(data: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8> {
     );
 
     let mut final_result = Vec::<u8>::new();
-    let mut buffer = [0; 4096];
+    let mut buffer = [0; 16];
     let mut read_buffer = RefReadBuffer::new(data);
     let mut write_buffer = RefWriteBuffer::new(&mut buffer);
 
     loop {
         // thread 'main' panicked at 'attempt to subtract with overflow'
         let result = encryptor.encrypt(&mut read_buffer, &mut write_buffer, true);
-        final_result.extend(write_buffer.take_read_buffer().take_remaining().iter().map(|&i| i));
         match result {
-
             Ok(BufferResult::BufferUnderflow) => break,
             Ok(BufferResult::BufferOverflow) => { }
-            Err(_) => { }
-        }    }
+            Err(e) => { println!("{:?}", e); break;}
+        }
+        final_result.extend(
+            write_buffer
+                .take_read_buffer()
+                .take_remaining()
+                .iter()
+                .map(|&i| i),
+        );
+    }
 
     final_result
 }
