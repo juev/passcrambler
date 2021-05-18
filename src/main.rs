@@ -2,6 +2,7 @@ use crate::cmd::parse_args;
 
 use rpassword::prompt_password_stdout;
 use std::path::Path;
+use std::fs;
 
 use crypto::aes::{cbc_encryptor, KeySize};
 use crypto::blockmodes::{PkcsPadding};
@@ -27,6 +28,9 @@ fn main() {
         println!("file not exists");
     }
 
+    let data = fs::read_to_string(&args.file)
+        .expect("Something went wrong reading the file");
+
     let password = prompt_password_stdout("Type password: ").unwrap();
 
     let mut hasher = Sha3::sha3_256();
@@ -45,7 +49,7 @@ fn main() {
 
     // find aes coding our data
     let result = aes_encrypt(
-        b"Hello world, hello world, hello world",
+        &*data.into_bytes(),
         pass_digest.as_bytes(),
         login_digest.as_bytes(),
     );
