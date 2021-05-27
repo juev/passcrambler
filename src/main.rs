@@ -7,7 +7,6 @@ use std::path::Path;
 use rand::distributions::Alphanumeric;
 use rand::prelude::*;
 use rand_pcg::Pcg64;
-use rand_seeder::Seeder;
 use std::iter;
 
 use crypto::aes::{cbc_encryptor, KeySize};
@@ -65,7 +64,7 @@ fn main() {
     hasher.reset();
     println!("aes1 digest: {}", sha_digest);
 
-    let mut rng: Pcg64 = Seeder::from(sha_digest).make_rng();
+    let mut rng: Pcg64 = rand_seeder::Seeder::from(sha_digest).make_rng();
 
     let long_password: String = iter::repeat(())
         .map(|()| rng.sample(Alphanumeric))
