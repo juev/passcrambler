@@ -4,10 +4,8 @@ use rpassword::prompt_password_stdout;
 use std::fs;
 use std::path::Path;
 
-use rand::distributions::Alphanumeric;
 use rand::prelude::*;
 use rand_pcg::Pcg64;
-use std::iter;
 
 use crypto::aes::{cbc_encryptor, KeySize};
 use crypto::blockmodes::PkcsPadding;
@@ -28,9 +26,9 @@ fn main() {
         }
     };
 
-    println!("{:#?}", args);
     if !Path::new(&args.file).exists() {
         println!("file not exists");
+        std::process::exit(1);
     }
 
     let data = fs::read_to_string(&args.file).expect("Something went wrong reading the file");
@@ -48,10 +46,6 @@ fn main() {
     let login_digest = hasher.result_str();
     hasher.reset();
 
-    // print login and password digest
-    println!("login digest: {}", login_digest);
-    println!("password digest: {}", pass_digest);
-
     // find aes coding our data
     let aes_out1 = aes_encrypt(
         &*data.into_bytes(),
@@ -62,17 +56,19 @@ fn main() {
     hasher.input(&aes_out1);
     let sha_digest = hasher.result_str();
     hasher.reset();
-    println!("aes1 digest: {}", sha_digest);
 
     let mut rng: Pcg64 = rand_seeder::Seeder::from(sha_digest).make_rng();
 
-    let long_password: String = iter::repeat(())
-        .map(|()| rng.sample(Alphanumeric))
-        .map(char::from)
-        .take(30)
+    let symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_&#".to_string();
+
+    let long_password: String = (0..args.length)
+        .map(|_| {
+            let idx = rng.gen_range(0..symbols.len());
+            (symbols.as_bytes())[idx] as char
+        })
         .collect();
 
-    println!("Random chars: {}", long_password);
+    println!("---\n{}", long_password);
 }
 
 pub fn aes_encrypt(data: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8> {
