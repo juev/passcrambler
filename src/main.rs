@@ -15,6 +15,9 @@ use crypto::buffer::{RefReadBuffer, RefWriteBuffer};
 use crypto::digest::Digest;
 use crypto::sha3::Sha3;
 
+use clipboard::ClipboardContext;
+use clipboard::ClipboardProvider;
+
 pub mod cmd;
 
 fn main() {
@@ -68,7 +71,12 @@ fn main() {
         })
         .collect();
 
-    println!("---\n{}", long_password);
+    if args.clip {
+        let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
+        ctx.set_contents(long_password.to_owned()).unwrap();
+    } else {
+        println!("---\n{}", long_password);
+    }
 }
 
 pub fn aes_encrypt(data: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8> {
