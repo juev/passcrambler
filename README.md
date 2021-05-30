@@ -19,7 +19,7 @@ Small utility to generate complicated passwords.
   and decrypt - it generates it by hasing function and you just need to copy it
   and login where you want
 
-+ Open source, written in python - nothing is hidden under the hood, **everyone
++ Open source, written in rust - nothing is hidden under the hood, **everyone
   can review it before using** and make custom changes in code
 
 ## How it works
