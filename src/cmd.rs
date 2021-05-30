@@ -4,14 +4,17 @@ const HELP: &str = concat!(
     env!("CARGO_PKG_VERSION"),
     "\n\n",
     "USAGE:
-  app [OPTIONS] --file FILE --login LOGIN
+  passcrambler [OPTIONS]
 
 FLAGS:
   -h, --help            Prints help information
+  -c, --clip            Copy the generated password into the clipboard instead of displaying
 
 OPTIONS:
+  -f, --file FILE       File for seeding password, REQUIRED
+  -l, --login LOGIN     Login data for password, REQUIRED
   -L, --length 30       Length of the password, default=30
-  -c, --clip            Copy the generated password into the clipboard instead of displaying
+  -s, --symbols '_&#'   Symbols for using in password, default='_&#'
 "
 );
 
@@ -21,6 +24,7 @@ pub struct AppArgs {
     pub login: String,
     pub length: u32,
     pub clip: bool,
+    pub symbols: String,
 }
 
 pub fn parse_args() -> Result<AppArgs, pico_args::Error> {
@@ -35,12 +39,16 @@ pub fn parse_args() -> Result<AppArgs, pico_args::Error> {
     let length: u32 = pargs
         .opt_value_from_fn(["-L", "--length"], parse_length)?
         .unwrap_or(30);
+    let symbols: String = pargs
+        .value_from_str(["-s", "--symbols"])
+        .unwrap_or("_&#".to_string());
 
     Ok(AppArgs {
         file,
         login,
         length,
         clip: pargs.contains(["-c", "--clip"]),
+        symbols,
     })
 }
 

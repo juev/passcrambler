@@ -62,7 +62,8 @@ fn main() {
 
     let mut rng: Pcg64 = rand_seeder::Seeder::from(sha_digest).make_rng();
 
-    let symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_&#".to_string();
+    let mut symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".to_string();
+    symbols.push_str(&args.symbols);
 
     let long_password: String = (0..args.length)
         .map(|_| {
