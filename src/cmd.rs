@@ -14,7 +14,7 @@ OPTIONS:
   -f, --file FILE       File for seeding password, REQUIRED
   -l, --login LOGIN     Login data for password, REQUIRED
   -L, --length 30       Length of the password, default=30
-  -s, --symbols '_&#'   Symbols for using in password, default='_&#'
+  -s, --symbols '_&#'   Symbols for using in password, default='_-&#*^%$@!~'
 "
 );
 
@@ -41,7 +41,7 @@ pub fn parse_args() -> Result<AppArgs, pico_args::Error> {
         .unwrap_or(30);
     let symbols: String = pargs
         .value_from_str(["-s", "--symbols"])
-        .unwrap_or("_&#".to_string());
+        .unwrap_or("_-&#*^%$@!~".to_string());
 
     Ok(AppArgs {
         file,
