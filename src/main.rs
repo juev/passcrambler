@@ -73,7 +73,7 @@ fn main() {
 
     if args.clip {
         let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
-        ctx.set_contents(long_password.to_owned()).unwrap();
+        ctx.set_contents(long_password).unwrap();
     } else {
         println!("---\n{}", long_password);
     }
@@ -102,7 +102,7 @@ pub fn aes_encrypt(data: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8> {
                 .take_read_buffer()
                 .take_remaining()
                 .iter()
-                .map(|&i| i),
+                .copied(),
         );
     }
 
