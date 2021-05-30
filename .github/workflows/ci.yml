@@ -1,0 +1,93 @@
+name: Continuous Integration
+on:
+    push:
+
+jobs:
+    check:
+        name: Check
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                rust:
+                    - stable
+        steps:
+            - name: Install Prerequisites
+              run: |
+                sudo apt-get update
+                sudo apt-get install xorg-dev
+            - uses: actions/checkout@v2
+            - uses: actions-rs/toolchain@v1
+              with:
+                  profile: minimal
+                  toolchain: ${{ matrix.rust }}
+                  override: true
+            - uses: actions-rs/cargo@v1
+              with:
+                  command: check
+                  args: --all-features
+
+    # test:
+    #     name: Tests
+    #     runs-on: ubuntu-latest
+    #     strategy:
+    #         matrix:
+    #             rust:
+    #                 - stable
+    #                 - nightly
+    #                 - 1.43.0 # lowest supported version
+    #     steps:
+    #         - uses: actions/checkout@v2
+    #         - uses: actions-rs/toolchain@v1
+    #           with:
+    #               profile: minimal
+    #               toolchain: ${{ matrix.rust }}
+    #               override: true
+    #         - uses: actions-rs/cargo@v1
+    #           with:
+    #               command: test
+    #               args: --all-features
+
+    fmt:
+        name: Rustfmt
+        runs-on: ubuntu-latest
+        steps:
+            - name: Install Prerequisites
+              run: |
+                sudo apt-get update
+                sudo apt-get install xorg-dev
+            - uses: actions/checkout@v2
+            - uses: actions-rs/toolchain@v1
+              with:
+                  profile: minimal
+                  toolchain: stable
+                  override: true
+                  components: rustfmt
+            - uses: actions-rs/cargo@v1
+              with:
+                  command: fmt
+                  args: --all -- --check
+
+    clippy:
+        name: Clippy
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                rust:
+                    - stable
+        steps:
+            - name: Install Prerequisites
+              run: |
+                sudo apt-get update
+                sudo apt-get install xorg-dev
+            - uses: actions/checkout@v2
+            - uses: actions-rs/toolchain@v1
+              with:
+                  profile: minimal
+                  toolchain: ${{ matrix.rust }}
+                  override: true
+                  components: clippy
+            - uses: actions-rs/clippy-check@v1
+              with:
+                  name: Clippy-${{ matrix.rust }}
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  args: --all-features
