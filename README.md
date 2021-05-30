@@ -64,6 +64,17 @@ Type password: _12345_
 C@4%0PGx*JfdN3AyaSN4K5hTUDlN4^
 ```
 
+## Install
+
+You can download binary distribution from [Release
+page](https://github.com/juev/passcrambler/releases/latest)
+
+or you can install with cargo:
+
+```bash
+cargo install --git https://github.com/juev/passcrambler --branch main
+```
+
 ## Typical scenario
 
 + I need to generate a new password i.e. for my e-mail
