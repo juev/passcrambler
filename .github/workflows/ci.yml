@@ -6,10 +6,6 @@ jobs:
     check:
         name: Check
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                rust:
-                    - stable
         steps:
             - name: Install Prerequisites
               run: |
@@ -19,7 +15,7 @@ jobs:
             - uses: actions-rs/toolchain@v1
               with:
                   profile: minimal
-                  toolchain: ${{ matrix.rust }}
+                  toolchain: stable
                   override: true
             - uses: actions-rs/cargo@v1
               with:
@@ -70,10 +66,6 @@ jobs:
     clippy:
         name: Clippy
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                rust:
-                    - stable
         steps:
             - name: Install Prerequisites
               run: |
@@ -83,11 +75,11 @@ jobs:
             - uses: actions-rs/toolchain@v1
               with:
                   profile: minimal
-                  toolchain: ${{ matrix.rust }}
+                  toolchain: stable
                   override: true
                   components: clippy
             - uses: actions-rs/clippy-check@v1
               with:
-                  name: Clippy-${{ matrix.rust }}
+                  name: Clippy-stable
                   token: ${{ secrets.GITHUB_TOKEN }}
                   args: --all-features
