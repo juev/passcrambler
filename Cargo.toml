@@ -10,7 +10,7 @@ edition = "2018"
 split-debuginfo = "unpacked"
 
 [dependencies]
-pico-args = "0.4.1"
+pico-args = "0.4.2"
 rpassword = "5.0.1"
 rust-crypto = "0.2.36"
 rand = "0.8.3"
