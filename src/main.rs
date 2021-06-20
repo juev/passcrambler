@@ -18,8 +18,12 @@ use crypto::sha3::Sha3;
 use clipboard::ClipboardContext;
 use clipboard::ClipboardProvider;
 
+use anyhow::Error;
+use fehler::throws;
+
 pub mod cmd;
 
+#[throws]
 fn main() {
     let args = match parse_args() {
         Ok(v) => v,
@@ -36,7 +40,7 @@ fn main() {
 
     let data = fs::read_to_string(&args.file).expect("Something went wrong reading the file");
 
-    let password = prompt_password_stdout("Type password: ").unwrap();
+    let password = prompt_password_stdout("Type password: ")?;
 
     let mut hasher = Sha3::sha3_512();
     // get password digest

@@ -1,3 +1,5 @@
+use fehler::throws;
+
 const HELP: &str = concat!(
     env!("CARGO_PKG_NAME"),
     ": v.",
@@ -27,7 +29,8 @@ pub struct AppArgs {
     pub symbols: String,
 }
 
-pub fn parse_args() -> Result<AppArgs, pico_args::Error> {
+#[throws(anyhow::Error)]
+pub fn parse_args() -> AppArgs {
     let mut pargs = pico_args::Arguments::from_env();
     if pargs.contains(["-h", "--help"]) {
         print!("{}", HELP);
@@ -43,13 +46,13 @@ pub fn parse_args() -> Result<AppArgs, pico_args::Error> {
         .value_from_str(["-s", "--symbols"])
         .unwrap_or("_-&#*^%$@!~".to_string());
 
-    Ok(AppArgs {
+    AppArgs {
         file,
         login,
         length,
         clip: pargs.contains(["-c", "--clip"]),
         symbols,
-    })
+    }
 }
 
 fn parse_length(s: &str) -> Result<u32, &'static str> {
