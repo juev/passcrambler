@@ -34,7 +34,7 @@ fn main() {
     };
 
     if !Path::new(&args.file).exists() {
-        println!("file not exists");
+        println!("File not exists: {}", &args.file);
         std::process::exit(1);
     }
 
