@@ -272,9 +272,9 @@ dependencies = [
 
 [[package]]
 name = "rand_seeder"
-version = "0.2.2"
+version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "612dd698949d531335b4c29d1c64fb11942798decfc08abc218578942e66d7d0"
+checksum = "cf2890aaef0aa82719a50e808de264f9484b74b442e1a3a0e5ee38243ac40bdb"
 dependencies = [
  "rand_core 0.6.3",
 ]
