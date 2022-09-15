@@ -63,23 +63,23 @@ jobs:
                   command: fmt
                   args: --all -- --check
 
-    clippy:
-        name: Clippy
-        runs-on: ubuntu-latest
-        steps:
-            - name: Install Prerequisites
-              run: |
-                sudo apt-get update
-                sudo apt-get install xorg-dev
-            - uses: actions/checkout@v2
-            - uses: actions-rs/toolchain@v1
-              with:
-                  profile: minimal
-                  toolchain: stable
-                  override: true
-                  components: clippy
-            - uses: actions-rs/clippy-check@v1
-              with:
-                  name: Clippy-stable
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  args: --all-features
+    # clippy:
+    #     name: Clippy
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: Install Prerequisites
+    #           run: |
+    #             sudo apt-get update
+    #             sudo apt-get install xorg-dev
+    #         - uses: actions/checkout@v2
+    #         - uses: actions-rs/toolchain@v1
+    #           with:
+    #               profile: minimal
+    #               toolchain: stable
+    #               override: true
+    #               components: clippy
+    #         - uses: actions-rs/clippy-check@v1
+    #           with:
+    #               name: Clippy-stable
+    #               token: ${{ secrets.GITHUB_TOKEN }}
+    #               args: --all-features
