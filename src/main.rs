@@ -1,6 +1,6 @@
 use crate::cmd::parse_args;
 
-use rpassword::prompt_password_stdout;
+use rpassword::prompt_password;
 use std::fs;
 use std::path::Path;
 
@@ -40,7 +40,7 @@ fn main() {
 
     let data = fs::read_to_string(&args.file).expect("Something went wrong reading the file");
 
-    let password = prompt_password_stdout("Type password: ")?;
+    let password = prompt_password("Type password: ")?;
 
     let mut hasher = Sha3::sha3_512();
     // get password digest
