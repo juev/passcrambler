@@ -14,7 +14,7 @@ panic = 'abort'
 
 [dependencies]
 pico-args = "0.5.0"
-rpassword = "7.1.0"
+rpassword = "7.2.0"
 rust-crypto = "0.2.36"
 rand = "0.8.5"
 rand_pcg = "0.3.0"
